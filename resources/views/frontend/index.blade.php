@@ -1,6 +1,7 @@
 @extends('frontend.layouts.master')
 @section('title', 'Best online shopping in Bangladesh')
 @section('content')
+ppp
     <main class="main" id="bg">
         <div class="container-fluide" style="position: relative;">
             <div class="row">
