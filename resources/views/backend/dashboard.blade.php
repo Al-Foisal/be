@@ -18,7 +18,7 @@
             </div>
         </div><!-- /.container-fluid -->
     </section>
-    @if (Auth::check() && Auth::user()->admin_user === 1) 
+    @if (Auth::guard('admin')->check() && Auth::guard('admin')->user()->admin_user == 1) 
         {{ 'return $next($request);' }}
     @endif
     <section class="content">
