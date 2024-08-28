@@ -10,6 +10,7 @@ use App\Models\User;
 
 class DashboardController extends Controller {
     public function dashboard() {
+        dd(auth()->user());
         $data                        = [];
         $data['todays_order']        = Order::where('created_at', today())->count();
         $data['todays_cancel_order'] = Order::where('created_at', today())->where('status', 0)->count();
