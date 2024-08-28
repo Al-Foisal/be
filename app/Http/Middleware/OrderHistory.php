@@ -17,7 +17,7 @@ class OrderHistory
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::guard('admin')->check() && Auth::guard('admin')->user()->order_history === 1) {
+        if (Auth::guard('admin')->check() && Auth::guard('admin')->user()->order_history == 1) {
             return $next($request);
         } else {
             return redirect()->route('admin.dashboard')->withToastError('Access denide!!');
