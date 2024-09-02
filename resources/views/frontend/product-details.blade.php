@@ -40,7 +40,6 @@
                 display: flex;
             }
         }
-
     </style>
 @endsection
 @section('content')
@@ -76,14 +75,15 @@
                                         @if ($product->video)
                                             <div class="product-item">
                                                 <iframe width="353" height="353" src="{{ $product->video }}"
-                                                    title="YouTube video player" disabled frameborder="1" allow=""></iframe>
+                                                    title="YouTube video player" disabled frameborder="1"
+                                                    allow=""></iframe>
                                             </div>
                                         @endif
                                         @foreach ($product->images as $image)
                                             <div class="product-item">
                                                 <img class="product-single-image" src="{{ asset($image->image) }}"
-                                                    data-zoom-image="{{ asset($image->image) }}" width="468" height="468"
-                                                    alt="product" />
+                                                    data-zoom-image="{{ asset($image->image) }}" width="468"
+                                                    height="468" alt="product" />
                                             </div>
                                         @endforeach
                                     </div>
@@ -210,11 +210,12 @@
                                     </div>
                                     <!-- End .product-single-qty -->
 
-                                    <a href="javascript:;" onclick="add_to_cart({{ $product->id }})"
+                                    <a href="javascript:;" onclick="add_to_cart({{ $product->id }},'cart')"
                                         class="btn btn-dark add-cart mr-2" title="Add to Cart">Add to
                                         Cart</a>
 
-                                    <a href="{{ route('cart') }}" class="btn btn-gray view-cart d-none">View cart</a>
+                                    <a href="javascript:;" onclick="add_to_cart({{ $product->id }},'buy')"
+                                        class="btn btn-secondary">Buy Now</a>
                                 </div>
                                 <!-- End .product-action -->
 
@@ -458,7 +459,8 @@
                                                             <a class="star-4" href="#">4</a>
                                                             <a class="star-5" href="#">5</a>
                                                         </span>
-                                                        <select name="rating" id="rating" required="" style="display: none;">
+                                                        <select name="rating" id="rating" required=""
+                                                            style="display: none;">
                                                             <option value="">Rate…</option>
                                                             <option value="5">Perfect</option>
                                                             <option value="4">Good</option>
@@ -528,26 +530,26 @@
                         </div>
 
                         <!--<div class="widget">
-                                                                                                                        <div class="maga-sale-container custom-maga-sale-container">
-                                                                                                                            <figure class="mega-image">
-                                                                                                                                <img src="assets/images/banners/banner-sidebar-bg.jpg" class="w-100"
-                                                                                                                                    alt="Banner Desc">
-                                                                                                                            </figure>
+                                                                                                                                <div class="maga-sale-container custom-maga-sale-container">
+                                                                                                                                    <figure class="mega-image">
+                                                                                                                                        <img src="assets/images/banners/banner-sidebar-bg.jpg" class="w-100"
+                                                                                                                                            alt="Banner Desc">
+                                                                                                                                    </figure>
 
-                                                                                                                            <div class="mega-content">
-                                                                                                                                <div class="mega-price-box">
-                                                                                                                                    <span class="price-big">50</span>
-                                                                                                                                    <span class="price-desc"><em>%</em>OFF</span>
-                                                                                                                                </div>
+                                                                                                                                    <div class="mega-content">
+                                                                                                                                        <div class="mega-price-box">
+                                                                                                                                            <span class="price-big">50</span>
+                                                                                                                                            <span class="price-desc"><em>%</em>OFF</span>
+                                                                                                                                        </div>
 
-                                                                                                                                <div class="mega-desc">
-                                                                                                                                    <h3 class="mega-title mb-0">MEGA SALE</h3>
-                                                                                                                                    <span class="mega-subtitle">MANY ITEM</span>
+                                                                                                                                        <div class="mega-desc">
+                                                                                                                                            <h3 class="mega-title mb-0">MEGA SALE</h3>
+                                                                                                                                            <span class="mega-subtitle">MANY ITEM</span>
+                                                                                                                                        </div>
+                                                                                                                                    </div>
                                                                                                                                 </div>
                                                                                                                             </div>
-                                                                                                                        </div>
-                                                                                                                    </div>
-                                                                                                                     End .widget -->
+                                                                                                                             End .widget -->
 
                         <div class="widget widget-featured">
                             <h3 class="widget-title">FEATURED PRODUCT</h3>
@@ -688,7 +690,7 @@
             $('.selected_size').val(size);
         }
 
-        function add_to_cart(product_id) {
+        function add_to_cart(product_id, type) {
 
             var color = $('.selected_color').val();
             var size = $('.selected_size').val();
@@ -739,15 +741,13 @@
                         id: product_id,
                         quantity: quantity,
                         color: color,
-                        size: size
+                        size: size,
+                        type: type
                     },
                     cache: false,
                     success: function(response) {
                         //  window.location.reload();
                         if (response.status === 'success') {
-
-
-
 
                             Toast.fire({
                                 icon: 'success',
@@ -757,11 +757,16 @@
 
                             $('.total_cart_items').html(response.cart_count);
 
-                            // // $('.test').html('This is for test');
-                            // $('.productImage_ajax').attr("src", response.productImage);
-                            // $('.productTotalPrice_ajax').html(response.productTotalPrice);
-                            // $('.total_price_ajax').html(response.total);
+                            if(type == 'buy'){
+                                window.location.replace('/checkout');
+                            }
+                        } else {
+                            Toast.fire({
+                                icon: 'Error',
+                                title: 'Please login with your account first'
+                            });
 
+                            window.location.replace('/login');
                         }
 
                     },

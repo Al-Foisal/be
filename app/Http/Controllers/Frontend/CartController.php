@@ -58,6 +58,13 @@ class CartController extends Controller {
     }
 
     public function addToCart(Request $request) {
+
+        if ($request->type == 'buy' && !auth()->check()) {
+            return response()->json([
+                'status' => 'fail',
+            ]);
+        }
+
         $data         = [];
         $product      = Product::where('id', $request->id)->with('images')->first();
         $data['id']   = $product->id;
@@ -83,6 +90,7 @@ class CartController extends Controller {
             'status'       => 'success',
             'cart_count'   => Cart::count(),
             'cart_content' => Cart::content(),
+            'type'         => $request->type,
         ]);
     }
 
@@ -174,8 +182,8 @@ class CartController extends Controller {
         $voucher = Voucher::find($request->id);
 
         Session::put('voucher', [
-            'offer'       => $voucher->offer_amount,
-            'min_amount'  => $voucher->min_amount,
+            'offer'      => $voucher->offer_amount,
+            'min_amount' => $voucher->min_amount,
         ]);
 
         return response()->json(['status' => 2]);
