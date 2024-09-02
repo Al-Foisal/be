@@ -7,29 +7,38 @@ use App\Models\BannerCollection;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Childcategory;
+use App\Models\Order;
 use App\Models\Page;
 use App\Models\Product;
 use App\Models\ProductCollection;
 use App\Models\Slider;
-use App\Models\Order;
 use App\Models\Subcategory;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class FrontendController extends Controller {
-    
-    public function orderTrack(){
-        return view('frontend.order-track')->with(['status'=>null,'first_header'=>true]);
+
+    public function orderTrack() {
+        return view('frontend.order-track')->with(['status' => null, 'first_header' => true]);
     }
-    
-    public function orderTrackStore(Request $request){
-        $data= [];
+
+    public function orderTrackStore(Request $request) {
+        $data                 = [];
         $data['first_header'] = true;
-        $order = Order::findOrFail($request->track);
-        session()->flash('status',$order->order_status);
-        return redirect()->route('order.track',$data);
+        $order                = Order::find($request->track);
+
+        if ($order) {
+            $status = $order->order_status;
+        } else {
+            $status = 'Invalid order ID';
+        }
+
+        session()->flash('status', $status);
+
+        return redirect()->route('order.track', $data);
     }
+
     public function index(Request $request) {
         $data                 = [];
         $data['first_header'] = true;
@@ -169,6 +178,7 @@ class FrontendController extends Controller {
         } else {
             $data['related_menus'] = Childcategory::where('category_id', $category->id)->where('status', 1)->get();
         }
+
         $data['category_banner'] = Slider::where('category_id', $category->id)->where('type', null)->get();
 
         return view('frontend.category-product', $data);
@@ -219,11 +229,12 @@ class FrontendController extends Controller {
 
         return view('frontend.categories', compact('second_header'));
     }
-    
+
     public function fashionCategory() {
         $second_header = true;
 
         $fashion = Category::find(15);
+
         return view('frontend.fashion_category', compact('fashion', 'second_header'));
     }
 
@@ -264,9 +275,9 @@ class FrontendController extends Controller {
 
         $second_header = true;
 
-        $bazar_mall = Slider::where('type',5)->get();
-        $products = Product::where('brand_id', $id)->where('discount', '>', 0)->where('status', 1)->paginate(20);
-        $brands   = Brand::where('mall', 1)->limit(20)->get();
+        $bazar_mall = Slider::where('type', 5)->get();
+        $products   = Product::where('brand_id', $id)->where('discount', '>', 0)->where('status', 1)->paginate(20);
+        $brands     = Brand::where('mall', 1)->limit(20)->get();
 
         return view('frontend.mall-product', compact('products', 'second_header', 'brands', 'bazar_mall'));
     }
@@ -299,24 +310,26 @@ class FrontendController extends Controller {
 
     public function allFlashDealProduct() {
         $second_header = true;
-        $flash_deal = Slider::where('type',6)->get();
+        $flash_deal    = Slider::where('type', 6)->get();
         $products      = Product::where('status', 1)->where('discount', '>', 0)->where('flash_deal', 1);
-        $category = request()->category;
-        if($category){
-            $category_id = Category::where('slug',$category)->first()->id;
-            $products = $products->where('category_id',$category_id);
+        $category      = request()->category;
+
+        if ($category) {
+            $category_id = Category::where('slug', $category)->first()->id;
+            $products    = $products->where('category_id', $category_id);
         }
+
         $products = $products->paginate(20);
 
-        return view('frontend.flash-deal', compact('products', 'second_header','flash_deal'));
+        return view('frontend.flash-deal', compact('products', 'second_header', 'flash_deal'));
     }
 
     public function allEverydayLowPriceProduct() {
         $second_header = true;
-        $everyday = Slider::where('type',7)->get();
+        $everyday      = Slider::where('type', 7)->get();
         $products      = Product::where('status', 1)->where('discount', '>', 0)->where('low_price', 1)->paginate(20);
 
-        return view('frontend.everyday-low-price', compact('products', 'second_header','everyday'));
+        return view('frontend.everyday-low-price', compact('products', 'second_header', 'everyday'));
     }
 
     public function allFlashSaleProduct() {
@@ -328,10 +341,10 @@ class FrontendController extends Controller {
 
     public function allFashionProduct() {
         $second_header = true;
-        $fashion = Slider::where('type',7)->get();
+        $fashion       = Slider::where('type', 7)->get();
         $products      = Product::where('status', 1)->where('discount', '>', 0)->where('fashion', 1)->paginate(20);
 
-        return view('frontend.fashion', compact('products', 'second_header','fashion'));
+        return view('frontend.fashion', compact('products', 'second_header', 'fashion'));
     }
 
 }

@@ -1,12 +1,3 @@
-<!--
-Website: Bazar kart 
-Author: QuickTech IT  
-Author URI: http://quicktech-ltd.com;
-Description: QuickTech IT maintain standard quality for e-commerce website.
-Version: 201.0.0
--->
-
-
 <!DOCTYPE html>
 <html lang="en">
 

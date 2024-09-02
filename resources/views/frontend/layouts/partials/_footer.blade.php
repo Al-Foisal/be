@@ -40,18 +40,14 @@
                     <!-- End .widget -->
                 </div>
                 <!-- End .col-lg-3 -->
-                <div class="col-lg-3 col-sm-6 pb-0">
+                <div class="col-lg-6 col-sm-12 pb-0">
                     <div class="widget d-flex justify-content-start">
                         <img src="{{ asset($company->logo) }}" style="width: 142px;height: 42px;" alt="">
-                        <br>
-
-                        <ul class="links pl-3">
-                            <li style="color: #ff0a0a;font-size: medium;">Go where your heart beats</li>
-                            <li>Download the App</li>
-                        </ul>
                     </div>
+
+                    <p>{{ $company->about }}</p>
                 </div>
-                <div class="col-lg-3 col-sm-6 pb-0">
+                {{-- <div class="col-lg-3 col-sm-6 pb-0">
                     <div class="widget d-flex justify-content-start">
                         <img src="{{ asset('images/apps.png') }}" style="width: 150px;height: 40px;padding-left: 2rem;"
                             alt="">
@@ -59,7 +55,7 @@
                             alt="">
                     </div>
                     <!-- End .widget -->
-                </div>
+                </div> --}}
                 <!-- End .col-lg-3 -->
             </div>
             <!-- End .row -->
@@ -71,9 +67,11 @@
         <div class="container">
             <div class="footer-bottom d-sm-flex align-items-center" style="border: none;">
                 <div class="footer-left">
-                    <span class="footer-copyright">Copyright © 2022 Brittanto eCommerce, All Right Reserved | Design &
+                    <span class="footer-copyright">Copyright © {{ date('Y') }} <b class="text-primary">
+                            {{ config('app.name') }}</b> , | Design &
                         Developed
-                        By <a href="https://brittanto.com">Brittanto</a></span>
+                        By <a href="https://www.facebook.com/al00aloppo" class="text-success"><b>Md Hafiz Al
+                                Foisal</b></a></span>
                 </div>
                 <div class="footer-right ml-auto mt-1 mt-sm-0">
                     <div class="payment-icons">

@@ -58,6 +58,8 @@ class ProfileController extends Controller {
 
         }
 
+        User::find($id)->update(['name' => $request->name]);
+
         UserAddress::updateOrCreate(
             ['user_id' => $id],
             [

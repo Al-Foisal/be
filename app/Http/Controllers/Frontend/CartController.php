@@ -14,7 +14,7 @@ class CartController extends Controller {
     public function cart() {
 
         if (Cart::count() == 0) {
-            return redirect()->back();
+            return redirect()->route('home');
         }
 
         $data                  = [];

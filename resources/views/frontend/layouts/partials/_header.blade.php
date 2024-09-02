@@ -4,14 +4,16 @@
             <div class="header-left"></div>
             <!-- End .header-left -->
             <div class="header-right header-dropdowns ml-0 ml-sm-auto">
-                <p class="top-message mb-0 d-none d-sm-block">Welcome To Brittanto eCommerce!</p>
+                <p class="top-message mb-0 d-none d-sm-block">Welcome To {{ config('app.name') }}!</p>
                 <div class="header-dropdown dropdown-expanded mr-3">
                     <a href="#">Links</a>
                     <div class="header-menu">
                         <ul>
-                            <li>
-                                <a href="{{ route('login') }}">Login</a>
-                            </li>
+                            @if (!auth()->check())
+                                <li>
+                                    <a href="{{ route('login') }}">Login</a>
+                                </li>
+                            @endif
                             <li>
                                 <a href="{{ route('cart') }}">Cart</a>
                             </li>
@@ -66,9 +68,15 @@
                         <span class="cart-count badge-circle total_cart_items">{{ Cart::count() }}</span>
                     </a>
                 </div>
-                <a href="{{ $company->wallet_link }}" class="logo ml-5 mr-10 d-none d-lg-flex">
-                    <img src="{{ asset($company->wallet) }}" width="150" height="50" alt="Logo">
-                </a>
+                @if (!auth()->check())
+                    <a href="{{ route('login') }}" class="logo ml-5 mr-10 d-none d-lg-flex">
+                        <b class="text-primary">Login</b>
+                    </a>
+                @else
+                    <a href="{{ route('user.dashboard') }}" class="logo ml-5 mr-10 d-none d-lg-flex">
+                        <b class="text-primary">{{ auth()->user()->name }}</b> 
+                    </a>
+                @endif
             </div>
             <!-- End .header-right -->
         </div>
